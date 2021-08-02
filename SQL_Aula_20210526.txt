@@ -1,0 +1,48 @@
+-- create index
+create index ix_cliente_nome on cliente (nome);  -- indice simples
+
+create index ix_cliente_nome_cidade_id on cliente (nome, cidade_id);  -- indice composto
+
+drop index ix_cliente_nome_cidade_id on cliente;   -- excluindo indice
+
+select * from cliente where nome = '' and cidade_id = 1;
+-- //////////////////////////////////////////////////////////////
+-- create view
+create view consulta_cliente as
+select c.nome as cliente, cid.nome as cidade, est.nome as estado
+from cliente c
+inner join cidade cid on c.cidade_id = cid.id_cidade
+inner join estado est on cid.estado_id = est.id_estado;
+
+drop view consulta_cliente;
+
+select * from consulta_cliente;
+
+update cliente set nome='Antonio' where id_cliente=1;
+-- insert into
+
+CREATE TABLE cidade_copia (
+  id_cidade int unsigned NOT NULL AUTO_INCREMENT,
+  nome varchar(150) DEFAULT NULL,
+  PRIMARY KEY (id_cidade)
+);
+
+drop table cidade_copia;
+
+insert into cidade_copia
+select id_cidade, nome from cidade where id_cidade = 6;
+-- //////////////////////////////////////////////////////////////
+-- distinct
+select distinct nome from cliente order by nome;
+
+select nome, count(nome) as quantidade from cliente group by nome having count(nome) >1;
+
+-- //////////////////////////////////////////////////////////////
+-- wildcards / in / upper
+select nome from cliente;
+
+select nome from cliente where nome in ('Manoel', 'Manoela');
+
+select nome from cliente where nome like '%oa%';
+
+select nome, upper(nome) as nome_maiusculo from cliente where upper(nome) like '%OA%';
