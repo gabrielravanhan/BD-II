@@ -107,3 +107,25 @@ values (1,1,500, 500, "2021-05-19","2021-05-21");
 
 insert compras (produto_id, fornecedor_id, quantidade, valor_total, data_solicitacao, data_prevista_entrega)
 values (2,1,300, 300, "2021-05-19","2021-05-19");
+
+CREATE VIEW vw_cliente_endereco AS
+SELECT cli.id_cilente, cli.nome AS nome, cli.endereco, cli.numero AS n_endereco, cid.nome AS cidade, est.nome AS estado
+	FROM cliente cli
+	INNER JOIN cidade cid 
+		ON cli.cidade_id = cid.id_cidade
+	INNER JOIN estado est 
+		ON cid.estado_id = est.id_estado;
+
+select * from vw_cliente_endereco;
+
+CREATE TABLE tap_cliente AS SELECT * FROM cliente;
+
+CREATE VIEW vw_produto_fornecedor AS
+SELECT prod.nome AS produto, forn_prod.preco_aquisicao, forn.nome AS forncedor
+    FROM produto prod
+    INNER JOIN fornecedor_produto forn_prod
+		ON prod.id_produto = forn_prod.produto_id
+	INNER JOIN fornecedor forn
+		ON forn_prod.fornecedor_id = forn.id_fornecedor;
+
+select * from vw_produto_fornecedor;
