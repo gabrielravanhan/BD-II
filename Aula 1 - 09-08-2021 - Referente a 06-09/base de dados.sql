@@ -14,7 +14,7 @@ CREATE TABLE cidade (
 );
 
 CREATE TABLE cliente (
-    id_cilente INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(150),
     data_nascimento DATE,
     endereco VARCHAR(250),
@@ -44,6 +44,17 @@ CREATE TABLE fornecedor_produto (
     id_fornecedor_produto INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fornecedor_id INT,
     produto_id INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE compra (
+	id_compras INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	produto_id INT,
+	fornecedor_id INT,
+	valor_total DOUBLE,
+	quantidade DOUBLE,
+	data_solicitacao DATE,
+	data_prevista_entrega DATE,
+	data_recebimento DATE
 );
 
 INSERT INTO estado (nome)
@@ -95,3 +106,9 @@ INSERT INTO fornecedor_produto (fornecedor_id, produto_id)
 
 INSERT INTO cidade (nome, estado_id)
 	VALUES ('Macatuba', 1);
+
+INSERT INTO compra (produto_id, fornecedor_id, quantidade, valor_total, data_solicitacao, data_prevista_entrega)
+	VALUES(1, 1, 500, 500, "2021-05-19", "2021-05-21");
+
+INSERT INTO compra (produto_id, fornecedor_id, quantidade, valor_total, data_solicitacao, data_prevista_entrega)
+	VALUES (2, 1, 300, 300, "2021-05-19", "2021-05-19");

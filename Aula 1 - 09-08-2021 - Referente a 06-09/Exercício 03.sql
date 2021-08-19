@@ -1,5 +1,5 @@
 -- view 01
-CREATE VIEW cidade_quantidade_clientes_fornecedores AS
+CREATE VIEW vw_cidade_quantidade_clientes_fornecedores AS
 	SELECT cid.nome AS nome_cidade, COUNT(cli.cidade_id) AS quantidade_clientes, COUNT(forn.cidade_id) AS quantidade_fornecedores
 		FROM cidade cid
 			LEFT JOIN cliente cli
@@ -8,10 +8,18 @@ CREATE VIEW cidade_quantidade_clientes_fornecedores AS
 				ON cid.id_cidade = forn.cidade_id
 		GROUP BY cid.id_cidade;
 
--- view 02
+SELECT * FROM vw_cidade_quantidade_clientes_fornecedores;
 
-	SELECT tip_prod.descricao AS tipo_produto, SUM(prod.) soma_peco_protudos_desse_tipo
-		FROM tipo_produto tip_prod
-			INNER JOIN produto prod
-				ON tip_prod.id_tp_produto = prod.tp_produto_id
-		GROUP BY tip_prod.id_tp_produto;
+-- view 02
+CREATE VIEW vw_total_gasto_em_compras AS
+	SELECT SUM(valor_total) AS valor_total_gasto_em_compras
+		FROM compra;
+
+SELECT * FROM vw_total_gasto_em_compras;
+
+-- view 03 quantidade_soma_media_id_produto
+CREATE VIEW vw_media_gata_por_compra AS
+	SELECT AVG(valor_total) AS media_gata_por_compra
+		FROM compra;
+
+SELECT * FROM vw_media_gata_por_compra;
