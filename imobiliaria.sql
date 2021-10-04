@@ -13,7 +13,7 @@ CREATE TABLE proprietario (
 CREATE TABLE imovel (
 	id_imovel INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     proprietario_id INT UNSIGNED NOT NULL,
-	valor_avaliado DECIMAL(14, 2) UNSIGNED NOT NULL,
+	valor_aluguel DECIMAL(14, 2) UNSIGNED NOT NULL,
     tipo VARCHAR(191) NOT NULL,
     endereco VARCHAR(191) NOT NULL
 );
@@ -40,7 +40,7 @@ CREATE TABLE aluguel (
     imovel_id INT UNSIGNED NOT NULL,
     corretor_id INT UNSIGNED NOT NULL,
     inquilino_id INT UNSIGNED NOT NULL,
-    valor_aluguel DECIMAL(14, 2) UNSIGNED NOT NULL
+    data_inicio DATE NOT NULL
 );
 
 ALTER TABLE imovel ADD CONSTRAINT fk_proprietario_imovel  FOREIGN KEY (proprietario_id) REFERENCES proprietario (id_proprietario);
@@ -61,10 +61,10 @@ INSERT INTO proprietario (nome_proprietario, cpf, telefone, email)
         ('Tiagão', '444.444.444-44', '14 998272612', 'tiago.vieira20@etec.sp.gov.br'),
         ('Doni', '555.555.555-55', '14 997890660', 'jose.cornachin3@etec.sp.gov.br');
         
-INSERT INTO imovel (proprietario_id, valor_avaliado, tipo, endereco)
+INSERT INTO imovel (proprietario_id, valor_aluguel, tipo, endereco)
 	VALUES
 		(1, 1000000.00, 'Palácio', 'Rua do Bidu'),
-        (2, 1.99, 'Casa', 'Recanto dos Carecas'),
+        (2, 9999999.99, 'Casa', 'Recanto dos Carecas'),
         (3, 50.00, 'Apartamento', 'Replit'),
         (4, 8000000.00, 'Bunker', "Tiago's Village"),
         (3, 10.00, 'Chácara', 'Zona Franca');
@@ -85,10 +85,54 @@ INSERT INTO inquilino (nome_inquilino, sexo, data_nascimento, telefone)
     ('André', 'M', '2005-02-06', '14 999042041'),
     ('Davila', 'M', '2004-07-08', '14 998641204');
 
-INSERT INTO aluguel (proprietario_id, imovel_id, corretor_id, inquilino_id, valor_aluguel)
+INSERT INTO aluguel (proprietario_id, imovel_id, corretor_id, inquilino_id, data_inicio)
 	VALUES
-    (1, 1, 1, 1, 1000.00),
-    (2, 2, 2, 2, 900.00),
-    (3, 3, 3, 3, 500.00),
-    (4, 4, 4, 4, 100000.00),
-    (5, 5, 5, 5, 10.00);
+    (1, 1, 1, 1, '2021-04-13'),
+    (2, 2, 2, 2, '2020-11-10'),
+    (3, 3, 3, 3, '1999-05-01'),
+    (4, 4, 4, 4, '1969-12-24'),
+    (5, 5, 5, 5, '2001-01-01');
+
+-- pesquisa em multiplas tabelas
+-- quem é o proprietário?
+SELECT p.nome_proprietario
+	FROM aluguel a 
+		INNER JOIN proprietario p 
+			ON a.proprietario_id = p.id_proprietario;
+
+-- quem é o proprietário?
+-- o que ele alugou?
+SELECT p.nome_proprietario, i.tipo, i.endereco, i.valor_aluguel
+	FROM aluguel a 
+		INNER JOIN proprietario p 
+			ON a.proprietario_id = p.id_proprietario
+		INNER JOIN imovel i	
+			ON a.imovel_id = i.id_imovel;
+
+-- quem é o proprietário?
+-- o que ele alugou?
+-- qual corretor alugou?
+SELECT p.nome_proprietario, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.telefone
+	FROM aluguel a 
+		INNER JOIN proprietario p 
+			ON a.proprietario_id = p.id_proprietario
+		INNER JOIN imovel i	
+			ON a.imovel_id = i.id_imovel
+		INNER JOIN corretor c
+			ON a.corretor_id = c.id_corretor;
+
+-- SÓ PRECISAVA TER FEITO ESSE
+-- quem é o proprietário?
+-- o que ele alugou?
+-- qual corretor alugou?
+-- quem alugou ?
+SELECT p.nome_proprietario, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.telefone, c.email, iq.nome_inquilino, iq.sexo
+	FROM aluguel a 
+		INNER JOIN proprietario p 
+			ON a.proprietario_id = p.id_proprietario
+		INNER JOIN imovel i	
+			ON a.imovel_id = i.id_imovel
+		INNER JOIN corretor c
+			ON a.corretor_id = c.id_corretor
+		INNER JOIN inquilino iq
+			ON a.inquilino_id = iq.id_inquilino;
