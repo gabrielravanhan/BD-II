@@ -67,7 +67,7 @@ INSERT INTO imovel (proprietario_id, valor_aluguel, tipo, endereco)
         (2, 9999999.99, 'Casa', 'Recanto dos Carecas'),
         (3, 50.00, 'Apartamento', 'Replit'),
         (4, 8000000.00, 'Bunker', "Tiago's Village"),
-        (3, 10.00, 'Chácara', 'Zona Franca');
+        (5, 10.00, 'Chácara', 'Zona Franca');
 
 INSERT INTO corretor (nome_corretor, cpf, telefone, email)
 	VALUES 
