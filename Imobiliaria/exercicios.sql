@@ -29,7 +29,7 @@ SELECT cor.nome_corretor
 	WHERE imo.tipo = 'Chácara';
 
 -- 5 qual a descrição das casas alugadas
-SELECT imo.descricao AS descricao_casa
+SELECT imo.descricao AS descricao_casa_alugada
 	FROM imovel imo
 		INNER JOIN aluguel alu	ON imo.id_imovel = alu.imovel_id
 	WHERE imo.tipo = 'Casa';
@@ -41,7 +41,8 @@ SELECT pro.nome_proprietario, imo.tipo, cor.nome_corretor, inq.nome_inquilino
 		INNER JOIN proprietario pro	ON alu.proprietario_id = pro.id_proprietario
         INNER JOIN imovel imo		ON alu.imovel_id = imo.id_imovel
         INNER JOIN corretor cor		ON alu.corretor_id = cor.id_corretor
-        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino;
+        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino
+	WHERE data_termino >= NOW() AND data_termino <= '2021-12-31';
 
 -- 7 mostrar todos os dados da tabela aluguel (proprietário, imovel, corretor e inquilino)
 --   mas somente dos contratos vencidos
@@ -50,7 +51,8 @@ SELECT pro.nome_proprietario, imo.tipo, cor.nome_corretor, inq.nome_inquilino
 		INNER JOIN proprietario pro	ON alu.proprietario_id = pro.id_proprietario
         INNER JOIN imovel imo		ON alu.imovel_id = imo.id_imovel
         INNER JOIN corretor cor		ON alu.corretor_id = cor.id_corretor
-        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino;
+        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino
+	WHERE data_termino < NOW();
 
 -- 8 mostrar todos os dados da tabela aluguel (proprietário, imovel, corretor e inquilino)
 --   mas somente dos contratos ativos ou seja não vencidos
@@ -59,7 +61,8 @@ SELECT pro.nome_proprietario, imo.tipo, cor.nome_corretor, inq.nome_inquilino
 		INNER JOIN proprietario pro	ON alu.proprietario_id = pro.id_proprietario
         INNER JOIN imovel imo		ON alu.imovel_id = imo.id_imovel
         INNER JOIN corretor cor		ON alu.corretor_id = cor.id_corretor
-        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino;
+        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino
+	WHERE data_termino >= NOW();
 
 -- 9 mostrar os dados de inquilinos que alugaram apartamento com valores de aluguel 
 --   entre 1000 e 1300
@@ -76,4 +79,5 @@ SELECT pro.nome_proprietario, imo.tipo, cor.nome_corretor, inq.nome_inquilino
 		INNER JOIN proprietario pro	ON alu.proprietario_id = pro.id_proprietario
         INNER JOIN imovel imo		ON alu.imovel_id = imo.id_imovel
         INNER JOIN corretor cor		ON alu.corretor_id = cor.id_corretor
-        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino;
+        INNER JOIN inquilino inq	ON alu.inquilino_id = inq.id_inquilino
+	WHERE data_termino >= NOW() AND imo.tipo = 'Casa' AND valor_aluguel BETWEEN 1000 AND 2000;

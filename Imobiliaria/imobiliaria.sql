@@ -67,10 +67,10 @@ INSERT INTO proprietario (nome_proprietario, cpf, telefone, email)
 INSERT INTO imovel (proprietario_id, valor_aluguel, tipo, endereco, descricao)
 	VALUES
 		(1, 1000000.00, 'Palácio', 'Rua do Bidu', 'Legal'),
-        (2, 9999999.99, 'Casa', 'Recanto dos Carecas', 'Incrível'),
+        (2, 1299.99, 'Casa', 'Recanto dos Carecas', 'Incrível'),
         (3, 1100.00, 'Apartamento', 'Replit','SOS'),
         (4, 8000000.00, 'Bunker', "Tiago's Village", 'Nota 2'),
-        (5, 10.00, 'Chácara', 'Zona Franca', 'DONI IS THE BEST');
+        (5, 1000.00, 'Chácara', 'Zona Franca', 'DONI IS THE BEST');
 
 INSERT INTO corretor (nome_corretor, cpf, telefone, email)
 	VALUES 
@@ -94,4 +94,4 @@ INSERT INTO aluguel (proprietario_id, imovel_id, corretor_id, inquilino_id, data
     (2, 2, 2, 2, '2020-11-10', '2021-12-30'),
     (3, 3, 3, 3, '1999-05-01', '2021-11-10'),
     (4, 4, 4, 4, '1969-12-24', '2022-02-01'),
-    (5, 5, 5, 5, '2001-01-01', '2024-07-08');
+    (5, 5, 5, 5, '2001-01-01', '2020-07-08');
