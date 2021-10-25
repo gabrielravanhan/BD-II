@@ -15,7 +15,8 @@ CREATE TABLE imovel (
     proprietario_id INT UNSIGNED NOT NULL,
 	valor_aluguel DECIMAL(14, 2) UNSIGNED NOT NULL,
     tipo VARCHAR(191) NOT NULL,
-    endereco VARCHAR(191) NOT NULL
+    endereco VARCHAR(191) NOT NULL,
+    descricao VARCHAR(191) NOT NULL
 );
 
 CREATE TABLE corretor (
@@ -29,6 +30,7 @@ CREATE TABLE corretor (
 CREATE TABLE inquilino (
 	id_inquilino INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nome_inquilino VARCHAR(191) NOT NULL,
+    fiador VARCHAR(191) NOT NULL,
     sexo CHAR(1) NOT NULL,
     data_nascimento DATE NOT NULL,
     telefone VARCHAR(12) NOT NULL
@@ -40,7 +42,8 @@ CREATE TABLE aluguel (
     imovel_id INT UNSIGNED NOT NULL,
     corretor_id INT UNSIGNED NOT NULL,
     inquilino_id INT UNSIGNED NOT NULL,
-    data_inicio DATE NOT NULL
+    data_inicio DATE NOT NULL,
+    data_termino DATE NOT NULL
 );
 
 ALTER TABLE imovel ADD CONSTRAINT fk_proprietario_imovel  FOREIGN KEY (proprietario_id) REFERENCES proprietario (id_proprietario);
@@ -61,13 +64,13 @@ INSERT INTO proprietario (nome_proprietario, cpf, telefone, email)
         ('Tiagão', '444.444.444-44', '14 998272612', 'tiago.vieira20@etec.sp.gov.br'),
         ('Doni', '555.555.555-55', '14 997890660', 'jose.cornachin3@etec.sp.gov.br');
         
-INSERT INTO imovel (proprietario_id, valor_aluguel, tipo, endereco)
+INSERT INTO imovel (proprietario_id, valor_aluguel, tipo, endereco, descricao)
 	VALUES
-		(1, 1000000.00, 'Palácio', 'Rua do Bidu'),
-        (2, 9999999.99, 'Casa', 'Recanto dos Carecas'),
-        (3, 50.00, 'Apartamento', 'Replit'),
-        (4, 8000000.00, 'Bunker', "Tiago's Village"),
-        (5, 10.00, 'Chácara', 'Zona Franca');
+		(1, 1000000.00, 'Palácio', 'Rua do Bidu', 'Legal'),
+        (2, 9999999.99, 'Casa', 'Recanto dos Carecas', 'Incrível'),
+        (3, 1100.00, 'Apartamento', 'Replit','SOS'),
+        (4, 8000000.00, 'Bunker', "Tiago's Village", 'Nota 2'),
+        (5, 10.00, 'Chácara', 'Zona Franca', 'DONI IS THE BEST');
 
 INSERT INTO corretor (nome_corretor, cpf, telefone, email)
 	VALUES 
@@ -77,110 +80,18 @@ INSERT INTO corretor (nome_corretor, cpf, telefone, email)
     ('Roque', '141.414.141-41', '14 969424269', 'roque.maitino@etec.sp.gov.br '),
     ('Joca', '151.515.151-51', '14 912345678', 'joao.angelico@etec.sp.gov.br');
 
-INSERT INTO inquilino (nome_inquilino, sexo, data_nascimento, telefone)
+INSERT INTO inquilino (nome_inquilino, sexo, data_nascimento, telefone, fiador)
 	VALUES 
-    ('Gabriel', 'M', '2004-11-10', '14 998724956'),
-    ('Tunica', 'F', '2004-04-13', '14 996099906'),
-    ('Bilu', 'M', '2004-10-09', '14 997034613'),
-    ('André', 'M', '2005-02-06', '14 999042041'),
-    ('Davila', 'M', '2004-07-08', '14 998641204');
+    ('Gabriel', 'M', '2004-11-10', '14 998724956', 'Chorão'),
+    ('Tunica', 'F', '2004-04-13', '14 996099906', 'Simone'),
+    ('Bilu', 'M', '2004-10-09', '14 997034613', 'Léo do Mercadinho'),
+    ('André', 'M', '2005-02-06', '14 999042041', 'Robertinho'),
+    ('Davila', 'M', '2004-07-08', '14 998641204', 'Irmão dele');
 
-INSERT INTO aluguel (proprietario_id, imovel_id, corretor_id, inquilino_id, data_inicio)
+INSERT INTO aluguel (proprietario_id, imovel_id, corretor_id, inquilino_id, data_inicio, data_termino)
 	VALUES
-    (1, 1, 1, 1, '2021-04-13'),
-    (2, 2, 2, 2, '2020-11-10'),
-    (3, 3, 3, 3, '1999-05-01'),
-    (4, 4, 4, 4, '1969-12-24'),
-    (5, 5, 5, 5, '2001-01-01');
-
--- pesquisa em multiplas tabelas
--- quem é o proprietário?
-SELECT p.nome_proprietario
-	FROM aluguel a 
-		INNER JOIN proprietario p 
-			ON a.proprietario_id = p.id_proprietario;
-
--- quem é o proprietário?
--- o que ele alugou?
-SELECT p.nome_proprietario, i.tipo, i.endereco, i.valor_aluguel
-	FROM aluguel a 
-		INNER JOIN proprietario p 
-			ON a.proprietario_id = p.id_proprietario
-		INNER JOIN imovel i	
-			ON a.imovel_id = i.id_imovel;
-
--- quem é o proprietário?
--- o que ele alugou?
--- qual corretor alugou?
-SELECT p.nome_proprietario, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.telefone
-	FROM aluguel a 
-		INNER JOIN proprietario p 
-			ON a.proprietario_id = p.id_proprietario
-		INNER JOIN imovel i	
-			ON a.imovel_id = i.id_imovel
-		INNER JOIN corretor c
-			ON a.corretor_id = c.id_corretor;
-
--- SÓ PRECISAVA TER FEITO ESSE
--- quem é o proprietário?
--- o que ele alugou?
--- qual corretor alugou?
--- quem alugou ?
-SELECT p.nome_proprietario, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.telefone, c.email, iq.nome_inquilino, iq.sexo
-	FROM aluguel a 
-		INNER JOIN proprietario p 
-			ON a.proprietario_id = p.id_proprietario
-		INNER JOIN imovel i	
-			ON a.imovel_id = i.id_imovel
-		INNER JOIN corretor c
-			ON a.corretor_id = c.id_corretor
-		INNER JOIN inquilino iq
-			ON a.inquilino_id = iq.id_inquilino;
-
--- LEFT - proprietario SEM imovel
-SELECT p.nome_proprietario, p.telefone, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.email, iq.nome_inquilino, iq.sexo
-	FROM proprietario p
-		LEFT JOIN aluguel a
-			ON a.proprietario_id = p.id_proprietario
-		LEFT JOIN imovel i
-			ON a.imovel_id = i.id_imovel
-		LEFT JOIN corretor c
-			ON a.corretor_id = c.id_corretor
-		LEFT JOIN inquilino iq
-			ON a.inquilino_id = iq.id_inquilino;
-
--- LEFT - imovel SEM proprietário ou sem inquilino
-SELECT p.nome_proprietario, p.telefone, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.email, iq.nome_inquilino, iq.sexo
-	FROM imovel i
-		LEFT JOIN aluguel a	
-			ON a.imovel_id = i.id_imovel
-		LEFT JOIN proprietario p
-			ON a.proprietario_id = p.id_proprietario
-		LEFT JOIN corretor c
-			ON a.corretor_id = c.id_corretor
-		LEFT JOIN inquilino iq
-			ON a.inquilino_id = iq.id_inquilino;
-
--- RIGHT - proprietario SEM imovel
-SELECT p.nome_proprietario, p.telefone, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.email, iq.nome_inquilino, iq.sexo
-	FROM aluguel a
-		RIGHT JOIN inquilino iq
-			ON a.inquilino_id = iq.id_inquilino
-		RIGHT JOIN imovel i
-			ON a.imovel_id = i.id_imovel
-		RIGHT JOIN corretor c
-			ON a.corretor_id = c.id_corretor
-		RIGHT JOIN proprietario p
-			ON a.proprietario_id = p.id_proprietario;
-
--- RIGHT - imovel SEM proprietário ou sem inquilino
-SELECT p.nome_proprietario, p.telefone, i.tipo, i.endereco, i.valor_aluguel, c.nome_corretor, c.email, iq.nome_inquilino, iq.sexo
-	FROM aluguel a
-		RIGHT JOIN inquilino iq
-			ON a.inquilino_id = iq.id_inquilino	
-		RIGHT JOIN corretor c
-			ON a.corretor_id = c.id_corretor
-		RIGHT JOIN proprietario p
-			ON a.proprietario_id = p.id_proprietario
-		RIGHT JOIN imovel i
-			ON a.imovel_id = i.id_imovel;
+    (1, 1, 1, 1, '2021-04-13', '2021-12-31'),
+    (2, 2, 2, 2, '2020-11-10', '2021-12-30'),
+    (3, 3, 3, 3, '1999-05-01', '2021-11-10'),
+    (4, 4, 4, 4, '1969-12-24', '2022-02-01'),
+    (5, 5, 5, 5, '2001-01-01', '2024-07-08');
